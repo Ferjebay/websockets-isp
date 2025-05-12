@@ -35,22 +35,6 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
       return;
     }
 
-    const existingSocketId = await this.pubClient.get(`user:${user_id}`);
-
-    if (existingSocketId) {
-      // Verificar si el socket ya está activo en alguna instancia
-      const existingSocket = this.wss.sockets.sockets.get(existingSocketId);
-      if (existingSocket) {
-        console.log(`🔄 Cliente ya conectado: ${user_id}, usando socket ID existente: ${existingSocketId}`);
-        client.emit('connected', { message: 'Conectado al WebSocket con sesión existente' });
-        client.disconnect();
-        return;
-      } else {
-        console.log(`🔄 Cliente ${user_id} tiene una sesión huérfana, reasignando nueva conexión.`);
-        await this.pubClient.del(`user:${user_id}`); // Eliminar sesión inválida
-      }
-    }
-
     console.log(`✅ Nuevo cliente conectado: ${user_id}, socket ID: ${client.id}`);
     await this.pubClient.set(`user:${user_id}`, client.id, { EX: 3600 });
 
