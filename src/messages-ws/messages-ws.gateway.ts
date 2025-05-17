@@ -36,20 +36,17 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
     }
 
     console.log(`✅ Nuevo cliente conectado: ${user_id}, socket ID: ${client.id}`);
-    await this.pubClient.set(`user:${user_id}`, client.id, { EX: 3600 });
+    await this.pubClient.sAdd(`user:${user_id}`, client.id);
+    await this.pubClient.expire(`user:${user_id}`, 3600);
 
     client.emit('connected', { message: 'Conectado al WebSocket' });
   }
 
-  async handleDisconnect(client: Socket) {
-    const userKeys = await this.pubClient.keys('user:*');
-
-    for (const key of userKeys) {
-      const socketId = await this.pubClient.get(key);
-      if (socketId === client.id) {
-        await this.pubClient.del(key);
-        console.log(`🚪 Cliente desconectado: ${key.replace('user:', '')}, eliminando de Redis`);
-      }
+  handleDisconnect(client: Socket) {
+    const user_id = client.handshake.headers.autentication;
+    if (user_id) {
+      this.pubClient.sRem(`user:${user_id}`, client.id);
     }
   }
+
 }

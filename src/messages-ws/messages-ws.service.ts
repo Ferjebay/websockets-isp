@@ -21,11 +21,12 @@ export class MessagesWsService {
 
   async updateStateInvoice(userId: string) {
     try {
+      const socketIds = await this.redisClient.sMembers(`user:${userId}`);
 
-      const socketId = await this.redisClient.get(`user:${userId}`);
-
-      if (socketId && this.wss) {
-        this.wss.to(socketId).emit('updateStateInvoice');
+      if (socketIds?.length > 0) {
+        for (const socketId of socketIds) {
+          this.wss.to(socketId).emit('updateStateInvoice');
+        }
       } else {
         console.warn(`⚠️ No se pudo enviar el mensaje WebSocket a user:${userId}`);
       }
