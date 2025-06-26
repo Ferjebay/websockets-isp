@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -11,6 +11,15 @@ export class AppController {
     @Param('usuario_id') usuario_id: string,
   ) {
     await this.appService.sendMessageWs(usuario_id);
+  }
+
+  @Post('/enviar-notificacion/:usuario_id/:tipo?')
+  async enviarNotificacion(
+    @Param('usuario_id') usuario_id: string,
+    @Param('tipo') tipo: string,
+    @Body('info') info: any
+  ) {
+    await this.appService.enviarNotificacion(usuario_id, tipo, info);
   }
 
 }

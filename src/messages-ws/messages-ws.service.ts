@@ -34,4 +34,20 @@ export class MessagesWsService {
       console.error('❌ ERROR al actualizar estado de la factura:', error);
     }
   }
+
+  async enviarNotificacion(userId: string, tipo: string, info: any) {
+    try {
+      const socketIds = await this.redisClient.sMembers(`user:${userId}`);
+
+      if (socketIds?.length > 0) {
+        for (const socketId of socketIds) {
+          this.wss.to(socketId).emit('notificacion', { tipo, info });
+        }
+      } else {
+        console.warn(`⚠️ No se pudo enviar el mensaje WebSocket a user:${userId}`);
+      }
+    } catch (error) {
+      console.error('❌ ERROR al actualizar estado de la factura:', error);
+    }
+  }
 }

@@ -12,4 +12,8 @@ export class AppService {
     this.messageWsService.updateStateInvoice(usuario_id)
   }
 
+  enviarNotificacion(usuario_id: string, tipo: string, info: any) {
+    this.messageWsService.enviarNotificacion(usuario_id, tipo, info)
+  }
+
 }
