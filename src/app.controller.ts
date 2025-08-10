@@ -17,7 +17,7 @@ export class AppController {
   async enviarNotificacion(
     @Param('usuario_id') usuario_id: string,
     @Param('tipo') tipo: string,
-    @Body('info') info: any
+    @Body() info: any
   ) {
     await this.appService.enviarNotificacion(usuario_id, tipo, info);
   }

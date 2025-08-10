@@ -41,7 +41,7 @@ export class MessagesWsService {
 
       if (socketIds?.length > 0) {
         for (const socketId of socketIds) {
-          this.wss.to(socketId).emit('notificacion', { tipo, info });
+          this.wss.to(socketId).emit('notificacion', { tipo, ...info });
         }
       } else {
         console.warn(`⚠️ No se pudo enviar el mensaje WebSocket a user:${userId}`);
