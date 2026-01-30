@@ -50,4 +50,23 @@ export class MessagesWsService {
       console.error('❌ ERROR al actualizar estado de la factura:', error);
     }
   }
+
+  async enviarNotificacionGlobal(tipo: string, info: any) {
+    try {
+      if (!this.wss) {
+        console.warn('⚠️ WebSocket server no inicializado');
+        return;
+      }
+
+      this.wss.emit('notificacion', {
+        tipo,
+        ...info
+      });
+
+    } catch (error) {
+      console.error('❌ ERROR al enviar notificación global:', error);
+    }
+  }
+
+
 }

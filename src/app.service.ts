@@ -16,4 +16,8 @@ export class AppService {
     this.messageWsService.enviarNotificacion(usuario_id, tipo, info)
   }
 
+  async enviarNotificacionGlobal(tipo: string, info: any) {
+    this.messageWsService.enviarNotificacionGlobal(tipo, info);
+  }
+
 }

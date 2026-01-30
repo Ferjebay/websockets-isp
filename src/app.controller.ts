@@ -22,4 +22,13 @@ export class AppController {
     await this.appService.enviarNotificacion(usuario_id, tipo, info);
   }
 
+  @Post('/enviar-notificacion-global/:tipo')
+  async enviarNotificacionGlobal(
+    @Param('tipo') tipo: string,
+    @Body() info: any
+  ) {
+    await this.appService.enviarNotificacionGlobal(tipo, info);
+  }
+
+
 }
